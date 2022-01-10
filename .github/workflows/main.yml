@@ -7,7 +7,7 @@ env:
 on:
   push:
     branches: 
-    - master
+    - main
 
 jobs:
   ci_part:
@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Git clone repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
         
       - name: Create zip deployment package
         run : zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./ -x *.git*
