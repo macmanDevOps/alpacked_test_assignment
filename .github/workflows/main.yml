@@ -1,0 +1,21 @@
+name: CI-CD-Pipeline-to-AWS
+env:
+  S3_BUCKET_NAME     : "alpacked-test-assignment"
+  DEPLOY_PACKAGE_NAME: "web_site_${{ github.sha }}.zip"
+  AWS_REGION_NAME    : "eu-central-1"
+  
+on:
+  push:
+    branches: 
+    - master
+
+jobs:
+  ci_part:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git clone repo
+        uses: actions/checkout@v2
+        
+      - name: Create zip deployment package
+        run : zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./ -x *.git*
