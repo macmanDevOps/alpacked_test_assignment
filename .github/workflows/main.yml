@@ -17,6 +17,15 @@ jobs:
       - name: Git clone repo
         uses: actions/checkout@v1
         
+      - name: Use Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+          
+      - name: Build
+        run: |
+          yarn install && yarn build
+        
       - name: Create zip deployment package
         run : zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./ -x *.git*
         
@@ -29,3 +38,8 @@ jobs:
           
       - name: Copy deployment packege to S3
         run : aws s3 cp ${{ env.DEPLOY_PACKAGE_NAME }} s3://${{ env.S3_BUCKET_NAME }}/
+        
+      - name: Deploy
+        uses: jonelantha/gatsby-s3-action@v1
+        with:
+          dest-s3-bucket: ${{ secrets.S3_BUCKET_NAME }}
