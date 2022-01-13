@@ -22,9 +22,17 @@ jobs:
         with:
           node-version: 14.x
           
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+          
       - name: Build
         run: |
-          yarn install && yarn build
+          npm ci && npm run format && npm run test && npm run build
         
       - name: Create zip deployment package
         run : zip -r ${{ env.DEPLOY_PACKAGE_NAME }} ./ -x *.git*
